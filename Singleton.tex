@@ -1,0 +1,38 @@
+%\documentclass[11pt]{book}
+%\usepackage[utf8]{inputenc}
+%\usepackage[spanish]{babel}
+
+\begin{document}
+
+\section{Singleton}
+
+\subsection{Problema}
+
+Durante el proceso de diseño de un programa puede surgir la necesidad de una clase cuya instancia sea única en todo el sistema. Comunmente es necesario usar singleton cuando la información de una clase debe ser accesada por diferentes clientes de un sistema y es vital que esta información no difiera entre consultas, por lo que no pueden existir múltiples instancias del objeto consultado en el sistema.
+
+\subsection{Intención}
+
+El objetivo de este patrón es poder garantizar al sistema que no existen múltiples instancias de un mismo objeto. Esto se logra limitando el acceso al constructor de la clase, de manera que no se puedan crear más objetos desde afuera de la misma. La construcción del objeto se delega a una función pública que primero verifica que no exista una instancia previa del objeto y luego la crea, en caso de existir una instancia anterior la función retorna la referencia a ésta. Finalmente para poder acceder a la refencia única del objeto es necesario un atributo dentro del mismo que la contenga.
+
+\subsection{Código de ejemplo}
+
+\begin{verbatim}
+public class MiClase {
+    // Se usa un atributo para referenciar la instancia única.
+    private static MiClase puntero = null;
+    // Se usa un constructor privado para evitar
+    // que se creen múltiples instancias del objeto.
+    private MiClase() {}
+    // Se usa una función pública que altere el puntero 
+    // a la instancia de la clase.
+    public static MiClase solicitarReferencia() {
+        // Sólo se crea la instancia si ésta no existe previamente.
+        if (puntero == null) {
+            puntero = new MiClase();
+        }   
+        return puntero;
+    }
+}
+\end{verbatim}
+ 
+\end{document}
