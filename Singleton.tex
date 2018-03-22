@@ -1,6 +1,7 @@
-%\documentclass[11pt]{book}
-%\usepackage[utf8]{inputenc}
-%\usepackage[spanish]{babel}
+\documentclass[12pt]{book}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{listings}
 
 \begin{document}
 
@@ -8,29 +9,97 @@
 
 \subsection{Problema}
 
-Durante el proceso de diseño de un programa puede surgir la necesidad de una clase cuya instancia sea única en todo el sistema. Comunmente es necesario usar singleton cuando la información de una clase debe ser accesada por diferentes clientes de un sistema y es vital que esta información no difiera entre consultas, por lo que no pueden existir múltiples instancias del objeto consultado en el sistema.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 \subsection{Intención}
 
-El objetivo de este patrón es poder garantizar al sistema que no existen múltiples instancias de un mismo objeto. Esto se logra limitando el acceso al constructor de la clase, de manera que no se puedan crear más objetos desde afuera de la misma. La construcción del objeto se delega a una función pública que primero verifica que no exista una instancia previa del objeto y luego la crea, en caso de existir una instancia anterior la función retorna la referencia a ésta. Finalmente para poder acceder a la refencia única del objeto es necesario un atributo dentro del mismo que la contenga.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\newpage
 \subsection{Código de ejemplo}
 
+\textbf{Pimera forma:} \\
+Explicación: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+
 \begin{verbatim}
-public class MiClase {
-    // Se usa un atributo para referenciar la instancia única.
-    private static MiClase puntero = null;
-    // Se usa un constructor privado para evitar
-    // que se creen múltiples instancias del objeto.
-    private MiClase() {}
-    // Se usa una función pública que altere el puntero 
-    // a la instancia de la clase.
-    public static MiClase solicitarReferencia() {
-        // Sólo se crea la instancia si ésta no existe previamente.
+public class Registro {
+	
+    private static Registro puntero = null;
+    
+    private ArrayList<Integer> id_jugadores;
+    
+    private Registro() {
+        id_jugadores = new ArrayList<Integer>();
+    }
+    
+    public void agregarJugador(int id) {
+        id_jugadores.add(id);
+    }
+    
+    public ArrayList<Integer> getId_jugadores() {
+        return id_jugadores;
+    }
+    
+    public void mostarJugadores() {
+        System.out.println(id_jugadores.toString());
+    }
+    
+    public static Registro solicitarReferencia() {
+
         if (puntero == null) {
-            puntero = new MiClase();
+            puntero = new Registro();
         }   
         return puntero;
+    }
+}
+\end{verbatim}
+
+\textbf{Forma ingenua:} \\
+Explicación: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+
+\begin{verbatim}
+public class Matemática {
+	
+    public int mcd (int a, int b) {
+        if (b == 0) {
+            return a;
+        }
+        else {
+            return mcd(b, a % b);
+        }
+    }
+    
+    public int mcm (int a, int b) {
+        return (a * b) / mcd(a, b);
+    }
+}
+\end{verbatim}
+
+\newpage
+
+\textbf{Caso de prueba:} \\
+Explicación: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+
+\begin{verbatim}
+public class Marcador {
+    public static void main(String[] args) {
+    
+        Registro jugadores = Registro.solicitarReferencia();
+    
+        jugadores.agrgarJugador(1);
+        jugadores.agrgarJugador(2);
+    
+        Registro copia_jugadores = Registro.solicitarReferencia();
+    
+        copia_jugadores.agrgarJugador(3);
+        copia_jugadores.agrgarJugador(4);
+        
+        jugadores.mostarJugadores();
+        copia_jugadores.mostarJugadores();	
     }
 }
 \end{verbatim}
