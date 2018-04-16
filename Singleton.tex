@@ -10,50 +10,41 @@
 
 \subsection{Problema}
 
-Descripción del problema típico que normalmente se resuelva con el patrón. 
-
-Por ejemplo en el caso de Singleton:
-Existe una clase que sólo puede tener una instancia, esta clase típicamente guarda información global para todo el sistema que no debe repetirse o tener múltiples valores. Por esta razón se busca que la clase tenga únicamente una instancia.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Durante el proceso de diseño de un sistema se requiere planificar el comportamiento de sus componentes, normalmente pueden surgir necesidades específicas para estos componentes, por ejemplo que una clase de la cual sólo debe existir una única instancia. Esta clase típicamente guarda información global para todo el sistema y esta información no debe ser inconsistente. Por esta razón se busca que la clase tenga únicamente una instancia, para sea un punto de acceso global, concentrado y seguro tanto para la lectura de datos como para la escritura.
 
 
 \subsubsection{Ejemplos}
-Archivo de configuración (bolsas de propiedades)
-Canales de comunicación (JNDI, etc...)
-Administrador de conexión con una DBMS
-Etc...
+
+\begin{itemize}
+    \item Archivo de configuración (bolsas de propiedades).
+    \item Canales de comunicación (por ejemplo JNDI).
+    \item Administradores de conexión con un DBMS.
+\end{itemize}
 
 \subsection{Intención}
 
-Descripción breve de cómo el patrón pretende resolver el problema. Abstraída de detalles de implementación, la intención describe el enfoque o el algoritmo que el patrón utiliza para tratar el comportamiento problemático.
+El patrón previene la creación de múltiples instancias adicionales. Es común que una primera instancia sea creada al momento en que el sistema se inicializa, aunque esto puede diferir según la implementación del patrón. En los ejemplos mostrados más adelante la primera instancia se crea en el momento que el usuario haga el primer uso del objeto.
+El patrón utiliza accesos estáticos para que los otros módulos se comuniquen con la única instancia del objeto de manera que sirve como un punto de acceso global a la información.
 
-Por ejemplo en el caso de Singleton:
-El patrón previene la creación de instancias adicionales, típicamente una primera instancia es creada al momento en que el sistema se inicializa, aunque esto no es obligatorio. El patrón utiliza accesos estáticos para que los otros módulos se comuniquen con la única instancia... etc...
-
-Agregar en esta sección imágenes ilustrativas, o ejemplos.
-
-\begin{figure}[h]
-\includegraphics[width=8cm]{imagenes/index.png}
-\end{figure}
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 \newpage
 \subsection{Solución}
 
-Descripción breve de los detalles de implementación del patrón, ya en un lenguaje más técnico, incluir un diagrama de clases:
+Se implementa una clase que contiene una referencia estática a sí misma. Esta referencia típicamente es privada, y se accede por medio de métodos estáticos que encapsulan los llamados a la implementación. \\
 
 \begin{figure}[h]
-\includegraphics[width=8cm]{imagenes/uml.PNG}
+\includegraphics[width=8cm]{imagenes/singleton.jpeg}
 \end{figure}
 
-Se implementa una clase que contiene una referencia estática a sí misma. Esta referencia típicamente es privada, y se accede por medio de métodos estáticos que encapsulan los llamados a la implementación.
 
 % Singleton tiene la peculiaridad que tiene varias implementaciones alternativas, la clásica, la ingenua y la segura 
 \textbf{Implementación clásica:} \\
+Para implementar un singleton se requiere quitar al usuario la capacidad de crear nuevas instancias de un objeto, por lo que la primera característica de esta implementación es crear un constructor privado.
+Ya que se elimina la capacidad de construir objetos es necesario un método público que verifique si ya existe una instancia del mismo, en caso de existir previamente una instancia esta se retorna o en caso contrario se crea la instancia del objeto en cuestión.
+Para que esto sea posible es necesario que el objeto tenga una referencia a su propia instancia, para que pueda ser retornada al ser consultada desde cualquier parte del sistema.
 
-Explicación: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+Como se puede apreciar en el código de ejemplo de esta implementación se desea un objeto que almacene el registro de jugadores, donde cada uno tendrá un identificador y este debe ser el mismo para todo el sistema.
+Se puede apreciar como el constructor de la clase es privado, pero se puede crear a través del método solicitarReferencia() de manera que la referencia a la instancia se retornará a cualquier módulo que requiera información de este registro.
 
 \begin{verbatim}
 public class Registro {
@@ -89,7 +80,8 @@ public class Registro {
 \end{verbatim}
 
 \textbf{Implementación ingenua:} \\
-Explicación: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+La implementación ingenua de un singleton se da cuando se crea un clase estática. Por naturaleza los métodos de este tipo de objeto pueden ser utilizados sin la necesidad de crear una instancia del objeto, por lo que sólo se crea una instancia en el sistema y no es responsabilidad del usuario crearla.
+Este tipo de comportamiento es equivalente al de una biblioteca, se pueden usar los métodos que brinda, pero no se requiere tener una instancia de la clase para poder usarlos.
 
 \begin{verbatim}
 public class Matemática {
@@ -112,7 +104,9 @@ public class Matemática {
 \newpage
 
 \textbf{Caso de prueba:} \\
-Explicación: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+El código a continuación es un ejemplo de cómo se comporta el singleton. 
+Se generan dos referencias hacia un objeto y se hacen inserciones de datos en el mismo. Normalmente un programa que no usa este patrón realizaría dos instancias del objeto y los datos querían separados, sin embargo gracias al patrón ambas referencias contienen la misma instancia del objeto, por lo que al mostrar los jugadores insertados en cada referencia se obtiene el mismo resultado, ya que se insertó sobre el mismo objeto.
+
 
 \begin{verbatim}
 public class Marcador {
